@@ -11,7 +11,7 @@ public class BPNodeRule implements BPRule {
     private String ruleName;
 
     @Override
-    public void handle(ByteBuffer buffer, BPContext ctx) {
+    public void handleDecode(ByteBuffer buffer, BPContext ctx) {
         return;
     }
 

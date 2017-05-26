@@ -15,12 +15,12 @@ public class BPSwitchRule implements BPRule {
     private String switchValue;
 
     @Override
-    public void handle(ByteBuffer buffer, BPContext ctx) {
+    public void handleDecode(ByteBuffer buffer, BPContext ctx) {
         // TODO: condition may require calculation
         Object condition = ctx.getAttr(switchValue);
         BPRule rule = patterns.getOrDefault(condition, defaultRule);
         if (null != rule) {
-            rule.handle(buffer, ctx);
+            rule.handleDecode(buffer, ctx);
         } else {
             throw new RuntimeException("ByteParser: switch rule pattern match fail! currRule = " + this.getName() + ", condition = " + condition.toString());
         }

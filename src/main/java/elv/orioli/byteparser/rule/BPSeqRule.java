@@ -13,8 +13,8 @@ public class BPSeqRule implements BPRule {
     private String ruleName;
 
     @Override
-    public void handle(ByteBuffer buffer, BPContext ctx) {
-        subRules.forEach(bpRule -> bpRule.handle(buffer, ctx));
+    public void handleDecode(ByteBuffer buffer, BPContext ctx) {
+        subRules.forEach(bpRule -> bpRule.handleDecode(buffer, ctx));
     }
 
     @Override

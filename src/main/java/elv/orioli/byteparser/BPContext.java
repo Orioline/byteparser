@@ -7,8 +7,7 @@ import java.util.Map;
  * Created by Orioline on 2017/5/24.
  */
 public class BPContext {
-    public BPResult bpResult;
-    public Map<String, Object> attrMap = null;
+    protected Map<String, Object> attrMap = null;
 
     public void addAttr(String key, Object value) {
         if (null == attrMap) {
@@ -34,9 +33,5 @@ public class BPContext {
         }
 
         return attrMap.getOrDefault(key, defaultValue);
-    }
-
-    public BPResult getBpResult() {
-        return bpResult;
     }
 }

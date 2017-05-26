@@ -18,6 +18,10 @@ public class ByteParser {
         return new ByteParser(BPConfigParser.compile(strCfg, ""));
     }
 
+    public static ByteParser getInstance(BPConfig bpConfig) {
+        return new ByteParser(bpConfig);
+    }
+
     /**
      * 'Deserialize' the specified bytes into its equivalent representation as a tree of Maps.
      * The structure of bytes should be represented by the format of {@link BPConfig}.
