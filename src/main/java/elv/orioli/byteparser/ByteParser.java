@@ -1,5 +1,8 @@
 package elv.orioli.byteparser;
 
+import elv.orioli.byteparser.config.BPConfig;
+import elv.orioli.byteparser.config.BPConfigParser;
+
 import java.util.LinkedHashMap;
 
 /**

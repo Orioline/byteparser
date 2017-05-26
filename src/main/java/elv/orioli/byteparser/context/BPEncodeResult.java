@@ -1,4 +1,4 @@
-package elv.orioli.byteparser;
+package elv.orioli.byteparser.context;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

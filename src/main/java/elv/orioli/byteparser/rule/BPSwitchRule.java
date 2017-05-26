@@ -1,6 +1,6 @@
 package elv.orioli.byteparser.rule;
 
-import elv.orioli.byteparser.BPContext;
+import elv.orioli.byteparser.context.BPContext;
 
 import java.nio.ByteBuffer;
 import java.util.Map;

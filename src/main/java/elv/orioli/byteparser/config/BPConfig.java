@@ -1,4 +1,4 @@
-package elv.orioli.byteparser;
+package elv.orioli.byteparser.config;
 
 import elv.orioli.byteparser.rule.BPRule;
 
