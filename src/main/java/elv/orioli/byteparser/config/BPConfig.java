@@ -8,8 +8,8 @@ import elv.orioli.byteparser.rule.BPRule;
 public class BPConfig {
     BPRule bpRule;
 
-    BPConfig() {
-
+    BPConfig(BPRule bpRule) {
+        this.bpRule = bpRule;
     }
 
     public BPRule getBpRule() {

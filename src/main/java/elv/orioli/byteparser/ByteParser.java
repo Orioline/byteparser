@@ -1,7 +1,7 @@
 package elv.orioli.byteparser;
 
 import elv.orioli.byteparser.config.BPConfig;
-import elv.orioli.byteparser.config.BPConfigParser;
+import elv.orioli.byteparser.config.BPStructConfigParser;
 
 import java.util.LinkedHashMap;
 
@@ -18,7 +18,7 @@ public class ByteParser {
     }
 
     public static ByteParser getInstance(String strCfg) {
-        return new ByteParser(BPConfigParser.compile(strCfg, ""));
+        return new ByteParser(BPStructConfigParser.compile(strCfg));
     }
 
     public static ByteParser getInstance(BPConfig bpConfig) {
