@@ -30,4 +30,9 @@ public class BPSwitchRule implements BPRule {
     public String getName() {
         return this.ruleName;
     }
+
+    @Override
+    public int getRulesNum() {
+        return patterns != null ? patterns.size() : 0;
+    }
 }

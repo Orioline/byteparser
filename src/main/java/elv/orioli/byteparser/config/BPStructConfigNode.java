@@ -24,19 +24,38 @@ public class BPStructConfigNode {
     boolean isBitOpr;             // the unit of size, true - bits, false - bytes;
     boolean isArray;
     String arraySize;
+
     public BPStructConfigNode(String strNodeCfg) {
         this.strNodeCfg = strNodeCfg;
         parseNameAndBody();
     }
 
     void parseNameAndBody() {
-        if (strNodeCfg.contains(":")) {
-            int divIndex = strNodeCfg.indexOf(":");
-            this.nodeName = strNodeCfg.substring(0, divIndex).trim();
-            this.body = strNodeCfg.substring(divIndex + 1).trim();
+        int firstLineIndex = this.strNodeCfg.indexOf("\n");
+        String strCfgFirstLine;
+        if (-1 == firstLineIndex) {
+            strCfgFirstLine = this.strNodeCfg;
         } else {
-            throw new RuntimeException("Node name parse failed! currNode = " + strNodeCfg);
+            strCfgFirstLine = this.strNodeCfg.substring(0, firstLineIndex);
         }
+
+        if (strCfgFirstLine.contains(":")) {
+            int divIndex = strCfgFirstLine.indexOf(":");
+            this.nodeName = strCfgFirstLine.substring(0, divIndex).trim();
+            this.body = flat(strCfgFirstLine.substring(divIndex + 1).trim());
+        } else {
+            this.nodeName = null;
+            this.body = flat(this.strNodeCfg);
+        }
+    }
+
+    private String flat(String strBody) {
+        String strData = strBody.trim();
+        if (strData.startsWith("{") && strData.endsWith("}")) {
+            strData = strData.substring(1, strBody.length() - 1).trim();
+        }
+
+        return strData;
     }
 
     void parse() {
@@ -44,10 +63,10 @@ public class BPStructConfigNode {
             this.nodeType = E_NODE_TYPE.LeafNode;
             parseNodeAttributes();
         } else {
-            List<String> strings = splitCurrLayerCfg(strNodeCfg);
+            List<String> strings = splitCurrLayerCfg(this.body);
             subNodes = new LinkedList<>();
             strings.forEach(strSubNodeCfg -> subNodes.add(new BPStructConfigNode(strSubNodeCfg)));
-            subNodes.forEach(bpStructConfigNode -> parse());
+            subNodes.forEach(BPStructConfigNode::parse);
             this.nodeType = E_NODE_TYPE.Seq;
         }
     }
@@ -96,7 +115,7 @@ public class BPStructConfigNode {
             Pattern p = Pattern.compile(nodeFieldMatchPattern);
             Matcher m = p.matcher(this.body);
             if (m.matches() && 5 == m.groupCount()) {
-                this.dataFieldType = E_DataFieldType.valueOf(m.group(1));
+                this.dataFieldType = E_DataFieldType.typeOf(m.group(1));
                 this.size = Integer.parseInt(m.group(2));
                 this.isBitOpr = (null != m.group(3)) && ("BIT".equals(m.group(3).toUpperCase()));
                 if (null != m.group(4) && null != m.group(5)) {

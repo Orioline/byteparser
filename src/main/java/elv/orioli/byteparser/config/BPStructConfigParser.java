@@ -47,7 +47,11 @@ public class BPStructConfigParser extends BPConfigParser {
     }
 
     private static String trimConfig(String strCfg) {
-        String[] cfgLines = strCfg.split("\\n", 0);
+        // TODO: use tree instead
+        String[] cfgLines = strCfg.replaceAll("\\{", "{\n")
+                .replaceAll("}", "\n}\n")
+                .replaceAll(";", "\n")
+                .split("\\n", 0);
         StringBuilder sb = new StringBuilder();
         for (String cfgLine : cfgLines) {
             String varStrLine;
@@ -62,28 +66,28 @@ public class BPStructConfigParser extends BPConfigParser {
             varStrLine = varStrLine.replaceAll(";", "")
                     .trim()
                     .replaceAll("\\s{2,}", " ");
-            if (varStrLine.equals("")) {
+            if (varStrLine.isEmpty()) {
                 // discard empty lines;
                 continue;
             }
             sb.append(varStrLine).append("\n");
         }
 
-        return sb.toString();
+        return sb.deleteCharAt(sb.length() - 1).toString();
     }
 
     private static BPRule generateBPRule(BPStructConfigNode node) {
         BPRule rule;
         switch (node.nodeType) {
             case LeafNode:
-                rule = new BPNodeRule(node.nodeName);
+                rule = new BPNodeRule(node.nodeName, node.dataFieldType, node.size, node.isBitOpr);
                 break;
             case Seq:
-                List<BPRule> subBPRules = node.subNodes.stream().map(subNode -> generateBPRule(node)).collect(Collectors.toList());
+                List<BPRule> subBPRules = node.subNodes.stream().map(BPStructConfigParser::generateBPRule).collect(Collectors.toList());
                 rule = new BPSeqRule(node.nodeName, subBPRules);
                 break;
             case Switch:
-                List<BPRule> optionalBPRules = node.subNodes.stream().map(subNode -> generateBPRule(node)).collect(Collectors.toList());
+                List<BPRule> optionalBPRules = node.subNodes.stream().map(BPStructConfigParser::generateBPRule).collect(Collectors.toList());
                 // TODO:
                 //rule = new BPSwitchRule(node.nodeName, optionalBPRules);
                 rule = new BPSwitchRule();

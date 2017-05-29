@@ -16,4 +16,6 @@ public interface BPRule {
     }
 
     String getName();
+
+    int getRulesNum();
 }

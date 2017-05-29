@@ -26,4 +26,13 @@ public class BPSeqRule implements BPRule {
     public String getName() {
         return this.ruleName;
     }
+
+    @Override
+    public int getRulesNum() {
+        return subRules != null ? subRules.size() : 0;
+    }
+
+    public List<BPRule> getSubRules() {
+        return subRules;
+    }
 }

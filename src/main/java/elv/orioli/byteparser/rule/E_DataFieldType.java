@@ -47,7 +47,7 @@ public enum E_DataFieldType {
         typeMap.put(strType.toUpperCase(), dataFieldType);
     }
 
-    public E_DataFieldType typeOf(String strType) {
+    public static E_DataFieldType typeOf(String strType) {
         return typeMap.getOrDefault(strType.toUpperCase(), null);
     }
 }

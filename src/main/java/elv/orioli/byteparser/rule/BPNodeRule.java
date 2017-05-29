@@ -8,16 +8,18 @@ import java.nio.ByteBuffer;
  * Created by Orioline on 2017/5/24.
  */
 public class BPNodeRule implements BPRule {
-    // data type
     public E_DataFieldType dataFieldType;
     public int size;
     public boolean isBitOpr;             // the unit of size, true - bits, false - bytes;
+    // data type
     private String ruleName;
-
     //
 
-    public BPNodeRule(String ruleName) {
+    public BPNodeRule(String ruleName, E_DataFieldType dataFieldType, int size, boolean isBitOpr) {
         this.ruleName = ruleName;
+        this.dataFieldType = dataFieldType;
+        this.size = size;
+        this.isBitOpr = isBitOpr;
     }
 
     @Override
@@ -28,6 +30,11 @@ public class BPNodeRule implements BPRule {
     @Override
     public String getName() {
         return this.ruleName;
+    }
+
+    @Override
+    public int getRulesNum() {
+        return 1;
     }
 
     public BPNodeRule setSize(int size, boolean isBitOpr) {
