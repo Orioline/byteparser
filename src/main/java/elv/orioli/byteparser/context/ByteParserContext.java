@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by Orioline on 2017/5/24.
  */
-public class BPContext {
+public class ByteParserContext {
     protected Map<String, Object> attrMap = null;
 
     public void addAttr(String key, Object value) {

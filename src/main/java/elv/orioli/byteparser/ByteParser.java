@@ -1,43 +1,51 @@
 package elv.orioli.byteparser;
 
-import elv.orioli.byteparser.config.BPConfig;
-import elv.orioli.byteparser.config.BPStructConfigParser;
+import elv.orioli.byteparser.config.ByteParserConfig;
+import elv.orioli.byteparser.context.ByteParserDecodeResult;
+import elv.orioli.byteparser.executor.ByteParserExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.LinkedHashMap;
+import java.nio.ByteBuffer;
+import java.util.Map;
 
 /**
- * This is the main class of ByteParser tool.
- * Created by Orioline on 2017/5/24.
+ * Created by Orioline on 2017/10/31.
  */
-public class ByteParser {
+public class ByteParser implements IByteParser {
 
-    public final BPConfig bpConfig;
-
-    private ByteParser(BPConfig bpConfig) {
-        this.bpConfig = bpConfig;
-    }
-
-    public static ByteParser getInstance(String strCfg) {
-        return new ByteParser(BPStructConfigParser.compile(strCfg));
-    }
-
-    public static ByteParser getInstance(BPConfig bpConfig) {
-        return new ByteParser(bpConfig);
-    }
+    Logger logger = LoggerFactory.getLogger(ByteParser.class);
+    ByteParserConfig byteParserConfig;
 
     /**
-     * 'Deserialize' the specified bytes into its equivalent representation as a tree of Maps.
-     * The structure of bytes should be represented by the format of {@link BPConfig}.
+     * User must init the byteParser before using it.
+     * @param config config
+     * @throws Exception
      */
-    public LinkedHashMap<String, Object> decode(byte[] bytes) {
-        return null;
+    @Override
+    public void init(Object config) throws Exception {
+        if(config instanceof ByteParserConfig) {
+            this.byteParserConfig = (ByteParserConfig) config;
+        } else {
+            byteParserConfig.init(config.toString());
+        }
     }
 
-    /**
-     * 'Serialize' the specified map to bytes.
-     * The structure of bytes should be represented by the format of {@link BPConfig}.
-     */
-    public byte[] encode(LinkedHashMap<String, Object> map) {
-        return null;
+    @Override
+    public Map<String, Object> parse(long msgId, ByteBuffer input) throws Exception {
+        // 1.
+        ByteParserDecodeResult byteParserDecodeResult = ByteParserExecutor.decode(msgId, input, byteParserConfig);
+        if(byteParserDecodeResult.isDecodeSuccess) {
+            logger.debug("ByteParser.parse: message {} parse success.", msgId);
+            return byteParserDecodeResult.getResultMap();
+        } else {
+            logger.warn("ByteParser.parse: message {} parse failed!", msgId);
+            return null;
+        }
+    }
+
+    @Override
+    public int getRuleNum() {
+        return 0;
     }
 }

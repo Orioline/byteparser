@@ -1,4 +1,4 @@
-package elv.orioli.byteparser.rule;
+package elv.orioli.byteparser.config;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +15,7 @@ public enum E_DataFieldType {
     INT32("INT"),
     UNSIGNED_INT32("UINT"),
     LONG64("LONG"),
+    NUMBER("NUMBER"),
     FLOAT("FLOAT"),
     DOUBLE("DOUBLE"),
     BYTES("BYTES", "BLOCK"),
