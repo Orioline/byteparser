@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by Orioline on 2017/5/26.
  */
 public enum E_DataFieldType {
+    OBJECT("OBJECT", "OBJ", "TABLE"),
+    ARRAY("ARRAY", "ARR"),
     BOOLEAN("BOOL", "BOOLEAN"),
     BYTE8("BYTE", "CHAR"),
     UNSIGNED_BYTE8("UBYTE", "UCHAR"),

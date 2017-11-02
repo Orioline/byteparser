@@ -1,6 +1,7 @@
 package elv.orioli.byteparser;
 
 import elv.orioli.byteparser.config.ByteParserConfig;
+import elv.orioli.byteparser.configparser.ByteParserMarkDownCfgParser;
 import elv.orioli.byteparser.context.ByteParserDecodeResult;
 import elv.orioli.byteparser.executor.ByteParserExecutor;
 import org.slf4j.Logger;
@@ -24,10 +25,11 @@ public class ByteParser implements IByteParser {
      */
     @Override
     public void init(Object config) throws Exception {
+
         if(config instanceof ByteParserConfig) {
             this.byteParserConfig = (ByteParserConfig) config;
         } else {
-            byteParserConfig.init(config.toString());
+            this.byteParserConfig = ByteParserMarkDownCfgParser.parse(config.toString());
         }
     }
 

@@ -1,6 +1,5 @@
 package elv.orioli.byteparser.context;
 
-import elv.orioli.byteparser.ByteParser;
 import elv.orioli.byteparser.config.ByteParserConfig;
 import elv.orioli.byteparser.rule.ByteParserRule;
 import org.slf4j.Logger;
@@ -8,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,7 +29,9 @@ public class ByteParserDecodeContext extends ByteParserContext {
 
     public ByteParserDecodeResult doParsing() {
         // handle parsing
-        ByteParserRule byteParserRule = byteParserConfig.configTable.get(msgId);
+        // String ruleName = byteParserConfig.ruleIndexTable.get(msgId);
+        // ByteParserRule byteParserRule = byteParserConfig.configTable.get(ruleName);
+        ByteParserRule byteParserRule = byteParserConfig.ruleTable.get(msgId);
         try {
             Object result = byteParserRule.handleDecode(buffer, this);
             if(result instanceof Map) {
