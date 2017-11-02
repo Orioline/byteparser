@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 
 /**
+ * Tool to manipulate ByteBuffer and byte arrays.
  * Created by Orioline on 2017/10/31.
  */
 public class ByteBufferOperator {
@@ -144,6 +145,25 @@ public class ByteBufferOperator {
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }
         return new String(hexChars);
+    }
+
+    public static byte[] hexStringToBytes(String str) {
+        if (null == str) {
+            return null;
+        }
+
+        String strData = str.replaceAll("[\\s\n]", "");
+        if (0 != strData.length() % 2) {
+            throw new RuntimeException("stringToBytes: data '" + str + "' length incorrect!");
+        }
+
+        int len = strData.length();
+        byte[] b = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            b[i / 2] = (byte) ((Character.digit(strData.charAt(i), 16) << 4) + Character
+                    .digit(strData.charAt(i + 1), 16));
+        }
+        return b;
     }
 
     // ----

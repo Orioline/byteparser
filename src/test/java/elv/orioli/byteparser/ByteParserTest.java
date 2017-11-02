@@ -3,6 +3,7 @@ package elv.orioli.byteparser;
 import elv.orioli.byteparser.config.ByteParserConfig;
 import elv.orioli.byteparser.config.E_DataFieldType;
 import elv.orioli.byteparser.rule.ByteParserNodeRule;
+import elv.orioli.byteparser.util.ByteBufferOperator;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
@@ -37,5 +38,26 @@ public class ByteParserTest {
         assertEquals(0x0102L, result.get("result"));
 
         System.out.println(result.toString());
+    }
+
+    @Test
+    public void decodeTest2() throws Exception {
+        String markDownCfg =
+                "## Table1 UserInfo\n" +
+                        "- 0x0011\n" +
+                        "- MessageId: 17\n" +
+                        "\n" +
+                        "name | type   | length | desc\n" +
+                        "---- | ----   | ------ | ----\n" +
+                        "id   | SHORT  | 2      | User Identifier\n" +
+                        "name | STRING | 8      | User Name";
+        ByteParser byteParser = new ByteParser();
+        byteParser.init(markDownCfg, "MARKDOWN");
+
+        Map<String, Object> result = byteParser.parse(0x0011L, ByteBufferOperator.hexStringToBytes("0001 75 73 65 72 30 30 30 31"));
+
+        assertEquals(2, result.size());
+        assertEquals(1L, result.get("id"));
+        assertEquals("user0001", result.get("name"));
     }
 }

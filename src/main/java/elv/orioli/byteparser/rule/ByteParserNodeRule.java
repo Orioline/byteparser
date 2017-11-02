@@ -30,6 +30,14 @@ public class ByteParserNodeRule implements ByteParserRule {
         Object rawData;
         switch (valueType) {
             case NUMBER:
+            case BOOLEAN:
+            case BYTE8:
+            case UNSIGNED_BYTE8:
+            case SHORT16:
+            case UNSIGNED_SHORT16:
+            case INT32:
+            case UNSIGNED_INT32:
+            case LONG64:
                 rawData = getValueFromBuffer(buffer, ctx.eval(valueLength));
                 break;
             case STRING:
@@ -50,6 +58,8 @@ public class ByteParserNodeRule implements ByteParserRule {
         if (rawData instanceof byte[]) {
             result = ByteBufferOperator.bytesToHex((byte[]) rawData);
         } else if (rawData instanceof Number) {
+            result = rawData;
+        } else if (rawData instanceof String) {
             result = rawData;
         } else {
             throw new RuntimeException("ByteParserNodeRule.handleDecode: value type not support!");
