@@ -19,9 +19,4 @@ public interface ByteParserRule {
     String getName();
 
     int getRulesNum();
-
-    default int eval(ByteParserDecodeContext ctx, String expr) {
-        // TODO:
-        return Integer.parseInt(expr);
-    }
 }

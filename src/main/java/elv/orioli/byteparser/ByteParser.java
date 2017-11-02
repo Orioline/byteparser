@@ -9,14 +9,15 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.Objects;
 
 /**
+ * The ByteParser Main Class
  * Created by Orioline on 2017/10/31.
  */
 public class ByteParser implements IByteParser {
-
-    Logger logger = LoggerFactory.getLogger(ByteParser.class);
-    ByteParserConfig byteParserConfig;
+    private Logger logger = LoggerFactory.getLogger(ByteParser.class);
+    protected ByteParserConfig byteParserConfig;
 
     /**
      * User must init the byteParser before using it.
@@ -24,13 +25,15 @@ public class ByteParser implements IByteParser {
      * @throws Exception
      */
     @Override
-    public void init(Object config) throws Exception {
+    public void init(ByteParserConfig config) throws Exception {
+        Objects.requireNonNull(config, "byteParserConfig should not be null!");
+        this.byteParserConfig = config;
+    }
 
-        if(config instanceof ByteParserConfig) {
-            this.byteParserConfig = (ByteParserConfig) config;
-        } else {
-            this.byteParserConfig = ByteParserMarkDownCfgParser.parse(config.toString());
-        }
+    @Override
+    public void init(String strConfig, String configType) {
+        // if "MarkDown".equals(configType);
+        this.byteParserConfig = ByteParserMarkDownCfgParser.parse(strConfig);
     }
 
     @Override

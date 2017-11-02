@@ -9,13 +9,12 @@ import static org.junit.Assert.*;
  * Created by Knight Leo on 2017/11/1.
  */
 public class ByteParserMarkDownCfgParserTest {
-
     @Test
     public void testMarkDownCfgParse_1() {
         String cfg1 =
-                "## Table.1 UserInfo\n" +
-                "0x0011\n" +
-                "- MessageId: 3\n" +
+                "## Table1 UserInfo\n" +
+                "- 0x0011\n" +
+                "- MessageId: 17\n" +
                 "\n" +
                 "name | type   | length | desc\n" +
                 "---- | ----   | ------ | ----\n" +
@@ -23,9 +22,8 @@ public class ByteParserMarkDownCfgParserTest {
                 "name | STRING | 8      | User Name";
 
         ByteParserConfig config = ByteParserMarkDownCfgParser.parse(cfg1);
-
-        assertEquals(1, config.configTable.size());
+        assertNotNull(config);
+        assertEquals(1, config.ruleTable.size());
+        assertEquals(2, config.ruleTable.get(0x0011L).getRulesNum());
     }
-
-
 }

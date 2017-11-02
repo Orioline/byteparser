@@ -59,7 +59,7 @@ public class ByteParserMarkDownCfgParser {
         for (ByteParserStructDefine structDefineTable : cfgTableList) {
             byteParserConfig.addRule(structDefineTable.getProtocolId(), structDefineTable.getRule(symbolTable));
         }
-        logger.debug("PARSING CFG FILE --- created {} parser rule(s), with {} index(s).", byteParserConfig.configTable.size(), byteParserConfig.ruleIndexTable.size());
+        logger.debug("PARSING CFG FILE --- created {} parser rule(s)", byteParserConfig.ruleTable.size());
 
         return byteParserConfig;
     }

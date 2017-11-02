@@ -50,7 +50,13 @@ public class ByteParserStructDefine {
         }
     }
 
-    public ByteParserStructDefine(String[] structCfgLines, int startLine, int endLine) {
+    /**
+     * create a ByteParserStructDefine by config;
+     * @param structCfgLines config File
+     * @param startLine start in
+     * @param endLine
+     */
+    private ByteParserStructDefine(String[] structCfgLines, int startLine, int endLine) {
         int table_row_index = 0;
         for (int lineNo = startLine; lineNo < endLine; lineNo++) {
             String currLine = structCfgLines[lineNo].trim();
@@ -101,6 +107,11 @@ public class ByteParserStructDefine {
 
             // init struct define table
             // TODO: does not support escape string \| yet;
+            // The table should like
+            // name | type | desc  // (line 1)
+            // ---- | ---- | ----  // (line 2)
+            // id   | INT  | ID    // (line 3)
+            // then skip the second line.
             if (currLine.contains(" | ")) {
                 table_row_index++;
                 String[] currColumns = currLine.split(" \\| ");
@@ -115,11 +126,7 @@ public class ByteParserStructDefine {
                         || currLine.startsWith(":-")
                         || currLine.startsWith("-:"))
                         ) {
-                    // if table format looks like
-                    // name | type | desc  // (line 1)
-                    // ---- | ---- | ----  // (line 2)
-                    // id   | INT  | ID    // (line 3)
-                    // then skip the second line.
+                    // Skip the ---- | ---: | :---- line.
                     continue;
                 } else {
                     // table column
@@ -139,7 +146,7 @@ public class ByteParserStructDefine {
                 }
             }
 
-            // TODO: other elements in block
+            // other elements in block
         }
     }
 
@@ -164,18 +171,21 @@ public class ByteParserStructDefine {
      * @return
      */
     public ByteParserRule getRule(ByteParserSymbolTable symbolTable) {
-        int titleLength = titles.length;
         Map<E_ConfigTitle, Integer> titleIndexMap = new HashMap<>();
         for (int titleIndex = 0, titlesLength = titles.length; titleIndex < titlesLength; titleIndex++) {
             String title = titles[titleIndex];
-            titleIndexMap.put(E_ConfigTitle.valueOf(title), titleIndex);
+            titleIndexMap.put(E_ConfigTitle.typeOf(title), titleIndex);
         }
 
+        ByteParserObjectRule objectRule = new ByteParserObjectRule();
+        objectRule.name = this.name;
+        objectRule.desc = this.name;
+
         for (String[] column : columns) {
-            // pick the attributes of current row;
+            // pick the attributes from current row;
             // find the type of rule: node/object/array;
+            // TODO: if is array: find the array length(perhaps runtime), init a arrayRule, then the subrule(node/object) into it.
             //   if (is array or object): find the jump/loop config, recursively call symbolTable.getSymbol().getRule(symbolTable);
-            // TODO: runtime: value from cache;
             // find the length/existence type (for runtime)
             //
             // rules:(mapping, ratio-offset, range, bind/cache, )
@@ -212,29 +222,36 @@ public class ByteParserStructDefine {
                 desc = name + " : " + strType + "(" + length + ")";
             }
 
+            // create byteParserRule by cfg in this line.
             ByteParserRule byteParserRule;
             switch (dataFieldType) {
                 case ARRAY:
+                    // TODO:
                     byteParserRule = new ByteParserArrayRule();
                     break;
                 case OBJECT:
-                    byteParserRule = new ByteParserObjectRule();
+                    byteParserRule = symbolTable.getSymbol(name).getRule(symbolTable);
                     break;
                 default:
-                    byteParserRule = new ByteParserNodeRule();
+                    ByteParserNodeRule nodeRule = new ByteParserNodeRule();
+                    nodeRule.name = name;
+                    nodeRule.valueType = dataFieldType;
+                    nodeRule.valueLength = length;
+                    nodeRule.desc = desc;
+                    byteParserRule = nodeRule;
                     break;
             }
+            objectRule.subRules.put(name, byteParserRule);
         }
 
-        // TODO: return what?
-        return null;
+        return objectRule;
     }
 
     /**
-     * generate default length by datafield type.
+     * generate default length by data field type.
      *
      * @param type E_DataFieldType type
-     * @return
+     * @return the default length of this data field type;
      */
     private String generateDefaultLengthByType(E_DataFieldType type) {
         switch (type) {

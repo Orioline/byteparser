@@ -34,4 +34,9 @@ public class ByteParserContext {
 
         return attrMap.getOrDefault(key, defaultValue);
     }
+
+    public int eval(String expr) {
+        // TODO:
+        return Integer.parseInt(expr);
+    }
 }

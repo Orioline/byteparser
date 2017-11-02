@@ -26,7 +26,7 @@ public class ByteParserArrayRule implements ByteParserRule {
         if (isArrayLengthFixed) {
             arrLength = Integer.parseInt(arrayLengthCfg);
         } else {
-            arrLength = eval(ctx, arrayLengthCfg);
+            arrLength = ctx.eval(arrayLengthCfg);
         }
 
         ArrayList<Object> result = new ArrayList<>(arrLength);

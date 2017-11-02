@@ -11,7 +11,6 @@ import java.nio.ByteBuffer;
  * Created by Orioline on 2017/10/31.
  */
 public class ByteParserNodeRule implements ByteParserRule {
-
     public String name;
     public String desc;
 
@@ -22,9 +21,7 @@ public class ByteParserNodeRule implements ByteParserRule {
 
     // state transfer rule
     public String stateTransferRule; // default = next rule;
-
     public String bindingRule;
-
     public String outputRule;
 
     @Override
@@ -33,17 +30,17 @@ public class ByteParserNodeRule implements ByteParserRule {
         Object rawData;
         switch (valueType) {
             case NUMBER:
-                rawData = getValueFromBuffer(buffer, eval(ctx, valueLength));
+                rawData = getValueFromBuffer(buffer, ctx.eval(valueLength));
                 break;
             case STRING:
                 if (null == valueLength || "".equals(valueLength)) {
                     rawData = getStringFromBuffer(buffer);
                 } else {
-                    rawData = getStringFromBuffer(buffer, eval(ctx, valueLength));
+                    rawData = getStringFromBuffer(buffer, ctx.eval(valueLength));
                 }
                 break;
             case BYTES:
-                rawData = getBytesFromBuffer(buffer, eval(ctx, valueLength));
+                rawData = getBytesFromBuffer(buffer, ctx.eval(valueLength));
                 break;
             default:
                 throw new RuntimeException("ByteParserNodeRule.handleDecode: value type " + valueType.name() + " not support!");

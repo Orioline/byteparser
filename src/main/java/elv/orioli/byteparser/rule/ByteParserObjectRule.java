@@ -12,8 +12,7 @@ import java.util.Map;
 public class ByteParserObjectRule implements ByteParserRule {
     public String name;
     public String desc;
-
-    public LinkedHashMap<String, ByteParserRule> subRules;
+    public LinkedHashMap<String, ByteParserRule> subRules = new LinkedHashMap<>();
 
     @Override
     public Object handleDecode(ByteBuffer buffer, ByteParserDecodeContext ctx) {
