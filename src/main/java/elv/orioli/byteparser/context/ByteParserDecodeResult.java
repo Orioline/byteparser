@@ -10,13 +10,13 @@ public class ByteParserDecodeResult {
     protected Throwable cause;
     protected LinkedHashMap<String, Object> resultMap = new LinkedHashMap<>();
 
-    public void setResultFail(Throwable t) {
+    void setResultFail(Throwable t) {
         this.isDecodeSuccess = false;
         this.cause = t;
         this.resultMap = null;
     }
 
-    public void setResultMap(LinkedHashMap<String, Object> resultMap) {
+    void setResultMap(LinkedHashMap<String, Object> resultMap) {
         this.isDecodeSuccess = true;
         this.resultMap = resultMap;
     }
